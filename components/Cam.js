@@ -3,6 +3,7 @@
 import React, {Component} from 'react'
 import Camera             from 'react-native-camera'
 import {connect}          from 'react-redux'
+import {hello as nope}            from '../actions/hello'
 import {
   TouchableOpacity,
   Text,
@@ -65,12 +66,36 @@ class Cam extends Component {
       </TouchableOpacity>
 
       { __DEV__ ?
-        <TouchableOpacity style={{marginTop: 40}} onPress={this.hello}>
-          <Text>dispatch action</Text>
-        </TouchableOpacity>
+        <View>
+          <TouchableOpacity style={{marginTop: 40}} onPress={this.props.hello}>
+            <Text>dispatch action</Text>
+          </TouchableOpacity>
+
+          { this.props.loading ?
+            <Text>Loading...</Text>
+          : this.props.great ?
+            <Text>✅ {JSON.stringify(this.props.cool)}</Text>
+          : this.props.err ?
+            <Text>💣 {this.props.err}</Text>
+          : null
+          }
+        </View>
       : null }
     </View>
   )}
+}
+
+function mapStateToProps(state) {
+  return state.hello
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    hello: () => {
+      console.log('im here man')
+      dispatch(nope())
+    }
+  }
 }
 
 const style = StyleSheet.create({
@@ -88,4 +113,4 @@ const style = StyleSheet.create({
   }
 })
 
-export default connect()(Cam)
+export default connect(mapStateToProps, mapDispatchToProps)(Cam)

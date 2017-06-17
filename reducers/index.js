@@ -1,6 +1,8 @@
-import { offline }                               from 'redux-offline'
-import offlineConfig                             from 'redux-offline/lib/defaults'
-import logger                                    from 'redux-logger'
+import { offline }      from 'redux-offline'
+import offlineConfig    from 'redux-offline/lib/defaults'
+import logger           from 'redux-logger'
+import thunk            from 'redux-thunk'
+import { AsyncStorage } from 'react-native'
 import {
   applyMiddleware,
   createStore,
@@ -10,7 +12,7 @@ import {
 
 import hello from './hello'
 
-const middleware = []
+const middleware = [thunk]
 if( __DEV__ ) {
   middleware.push(logger)
 }
@@ -24,7 +26,13 @@ const store = createStore(
   undefined,
   compose(
     applyMiddleware(...middleware),
-    offline(offlineConfig),
+    offline({
+      ...offlineConfig,
+      persistOptions: {
+        storage: AsyncStorage,
+        whitelist: ['offline'],
+      },
+    }),
   )
 )
 

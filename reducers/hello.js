@@ -1,9 +1,19 @@
 const initialState = {}
 export default function(state=initialState, action) {
   switch(action.type) {
-    case 'hello:world':
+    case 'hello:loading':
       return {
-        cool: 'nice'
+        loading: true,
+      }
+    case 'hello:load:yes':
+      return {
+        loading: false,
+        great: action.response,
+      }
+    case 'hello:load:no':
+      return {
+        loading: false,
+        err: action.err,
       }
     default:
       return state

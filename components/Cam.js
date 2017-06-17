@@ -69,12 +69,13 @@ class Cam extends Component {
 
             { this.props.loading ?
               <Text>Loading...</Text>
-            : this.props.great ?
-              <Text>✅ {JSON.stringify(this.props.cool)}</Text>
-            : this.props.err ?
-              <Text>💣 {this.props.err}</Text>
-            : null
-            }
+            : null }
+
+            <View>
+              <Text>⌛: {JSON.stringify(this.props.requests.map((r, i) => i))}</Text>
+              <Text>✅: {JSON.stringify(this.props.responses)}</Text>
+              <Text>💣: {JSON.stringify(this.props.errors)}</Text>
+            </View>
           </View>
         : null }
       </View>

@@ -9,6 +9,8 @@ import {
   StyleSheet,
 } from 'react-native'
 
+const baseUrl = 'https://disposable.superserious.co'
+
 export default class App extends Component {
   constructor(props) {
     super(props)
@@ -18,9 +20,31 @@ export default class App extends Component {
   takePicture() {
     console.warn('Taking picture...')
     this.camera.capture({metadata: {}}).then((data) => {
-      console.warn(data)
+      return this.upload(data.path)
     }).catch((err) => {
       console.error(err)
+    })
+  }
+
+  upload(imageUri) {
+    return new Promise((resolve, reject) => {
+      var body = new FormData();
+      body.append('photo', {uri: imageUri, name: 'photo.jpg', type: 'image/jpeg'});
+
+      var xhr = new XMLHttpRequest;
+      xhr.onreadystatechange = (e) => {
+        if( xhr.readyState !== 4 ) { return; }
+
+        if( xhr.status < 299 ) {
+          console.warn(xhr.responseText)
+          const json = JSON.parse(xhr.responseText);
+          return resolve(json)
+        } else {
+          reject(xhr.status + ': ' + xhr.responseText);
+        }
+      }
+      xhr.open('POST', `${baseUrl}/photos`);
+      xhr.send(body);
     })
   }
 

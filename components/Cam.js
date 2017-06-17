@@ -16,9 +16,10 @@ class Cam extends Component {
   constructor(props) {
     super(props)
     this.takePicture = this.takePicture.bind(this)
+    this.hello       = this.hello.bind(this)
   }
 
-  componentDidMount() {
+  hello() {
     this.props.dispatch({type: 'hello:world'})
   }
 
@@ -58,11 +59,16 @@ class Cam extends Component {
       <Camera style={style.photoWindow}
         ref={(cam) => { this.camera = cam }}
         aspect={Camera.constants.Aspect.fill}
-        captureTarget={Camera.constants.CaptureTarget.temp}
-         />
+        captureTarget={Camera.constants.CaptureTarget.temp} />
       <TouchableOpacity style={style.hello} onPress={this.takePicture}>
         <Text>take photo</Text>
       </TouchableOpacity>
+
+      { __DEV__ ?
+        <TouchableOpacity style={{marginTop: 40}} onPress={this.hello}>
+          <Text>dispatch action</Text>
+        </TouchableOpacity>
+      : null }
     </View>
   )}
 }

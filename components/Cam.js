@@ -3,7 +3,7 @@
 import React, {Component} from 'react'
 import Camera             from 'react-native-camera'
 import {connect}          from 'react-redux'
-import {hello as nope}            from '../actions/hello'
+import {hello}            from '../actions/hello'
 import {
   TouchableOpacity,
   Text,
@@ -17,11 +17,6 @@ class Cam extends Component {
   constructor(props) {
     super(props)
     this.takePicture = this.takePicture.bind(this)
-    this.hello       = this.hello.bind(this)
-  }
-
-  hello() {
-    this.props.dispatch({type: 'hello:world'})
   }
 
   takePicture() {
@@ -55,34 +50,36 @@ class Cam extends Component {
     })
   }
 
-  render() { return (
-    <View style={style.container}>
-      <Camera style={style.photoWindow}
-        ref={(cam) => { this.camera = cam }}
-        aspect={Camera.constants.Aspect.fill}
-        captureTarget={Camera.constants.CaptureTarget.temp} />
-      <TouchableOpacity style={style.hello} onPress={this.takePicture}>
-        <Text>take photo</Text>
-      </TouchableOpacity>
+  render() {
+    return (
+      <View style={style.container}>
+        <Camera style={style.photoWindow}
+          ref={(cam) => { this.camera = cam }}
+          aspect={Camera.constants.Aspect.fill}
+          captureTarget={Camera.constants.CaptureTarget.temp} />
+        <TouchableOpacity style={style.hello} onPress={this.takePicture}>
+          <Text>take photo</Text>
+        </TouchableOpacity>
 
-      { __DEV__ ?
-        <View>
-          <TouchableOpacity style={{marginTop: 40}} onPress={this.props.hello}>
-            <Text>dispatch action</Text>
-          </TouchableOpacity>
+        { __DEV__ ?
+          <View>
+            <TouchableOpacity style={{marginTop: 40}} onPress={this.props.hello}>
+              <Text>dispatch action</Text>
+            </TouchableOpacity>
 
-          { this.props.loading ?
-            <Text>Loading...</Text>
-          : this.props.great ?
-            <Text>✅ {JSON.stringify(this.props.cool)}</Text>
-          : this.props.err ?
-            <Text>💣 {this.props.err}</Text>
-          : null
-          }
-        </View>
-      : null }
-    </View>
-  )}
+            { this.props.loading ?
+              <Text>Loading...</Text>
+            : this.props.great ?
+              <Text>✅ {JSON.stringify(this.props.cool)}</Text>
+            : this.props.err ?
+              <Text>💣 {this.props.err}</Text>
+            : null
+            }
+          </View>
+        : null }
+      </View>
+    )
+  }
 }
 
 function mapStateToProps(state) {
@@ -92,8 +89,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     hello: () => {
-      console.log('im here man')
-      dispatch(nope())
+      dispatch(hello())
     }
   }
 }

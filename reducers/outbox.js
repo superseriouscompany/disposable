@@ -6,7 +6,7 @@ export default function(state=initialState, action) {
     case 'outbox:add':
       return {
         ...state,
-        queue: state.queue.concat(Math.random())
+        queue: state.queue.concat(+new Date)
       }
     default:
       return state

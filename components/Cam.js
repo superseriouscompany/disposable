@@ -18,6 +18,18 @@ class Cam extends Component {
   constructor(props) {
     super(props)
     this.takePicture = this.takePicture.bind(this)
+    this.flip = this.flip.bind(this)
+    this.state = {
+      cameraType: Camera.constants.Type.back,
+    }
+  }
+
+  flip() {
+    this.setState({
+      cameraType: this.state.cameraType === Camera.constants.Type.back ?
+        Camera.constants.Type.front :
+        Camera.constants.Type.back
+    })
   }
 
   takePicture() {
@@ -56,11 +68,16 @@ class Cam extends Component {
     return (
       <View style={style.container}>
         <Camera style={style.photoWindow}
+          type={this.state.cameraType}
           ref={(cam) => { this.camera = cam }}
           aspect={Camera.constants.Aspect.fill}
           captureTarget={Camera.constants.CaptureTarget.disk} />
         <TouchableOpacity style={style.hello} onPress={this.takePicture}>
           <Text>take photo</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={style.flip} onPress={this.flip}>
+          <Text>Flip Camera</Text>
         </TouchableOpacity>
       </View>
     )

@@ -6,6 +6,7 @@ export function hello() {
   return function(dispatch) {
     console.log('hit it')
     dispatch({type: 'hello:loading'})
+    dispatch({type: 'outbox:add'})
     return api.request('/hello').then((ok) => {
       dispatch({type: 'hello:load:yes', response: ok})
     }).catch((err) => {

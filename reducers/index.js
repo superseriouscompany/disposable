@@ -1,8 +1,7 @@
-import { offline }      from 'redux-offline'
-import offlineConfig    from 'redux-offline/lib/defaults'
-import logger           from 'redux-logger'
-import thunk            from 'redux-thunk'
-import { AsyncStorage } from 'react-native'
+import {persistStore, autoRehydrate} from 'redux-persist'
+import logger                        from 'redux-logger'
+import thunk                         from 'redux-thunk'
+import { AsyncStorage }              from 'react-native'
 import {
   applyMiddleware,
   createStore,
@@ -10,7 +9,8 @@ import {
   combineReducers,
 } from 'redux'
 
-import hello from './hello'
+import hello  from './hello'
+import outbox from './outbox'
 
 const middleware = [thunk]
 if( __DEV__ ) {
@@ -18,7 +18,8 @@ if( __DEV__ ) {
 }
 
 const reducers = combineReducers({
-  hello
+  hello,
+  outbox,
 })
 
 const store = createStore(
@@ -26,14 +27,16 @@ const store = createStore(
   undefined,
   compose(
     applyMiddleware(...middleware),
-    offline({
-      ...offlineConfig,
-      persistOptions: {
-        storage: AsyncStorage,
-        whitelist: ['offline'],
-      },
-    }),
+    autoRehydrate()
   )
 )
 
-module.exports = store
+const persistence = persistStore(store, {storage: AsyncStorage, whitelist: [
+  'outbox',
+]})
+
+export default store
+
+export function clear() {
+  persistence.purge()
+}

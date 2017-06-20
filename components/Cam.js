@@ -5,6 +5,7 @@ import Camera             from 'react-native-camera'
 import {connect}          from 'react-redux'
 import {hello}            from '../actions/hello'
 import {
+  Dimensions,
   TouchableOpacity,
   Text,
   View,
@@ -72,7 +73,7 @@ class Cam extends Component {
             : null }
 
             <View>
-              <Text>⌛: {JSON.stringify(this.props.requests.map((r, i) => i))}</Text>
+              <Text>⌛: {JSON.stringify(this.props.requests.map((r, i) => i ))}</Text>
               <Text>✅: {JSON.stringify(this.props.responses)}</Text>
               <Text>💣: {JSON.stringify(this.props.errors)}</Text>
             </View>
@@ -95,6 +96,8 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
+const {width, height} = Dimensions.get('window')
+
 const style = StyleSheet.create({
   container: {
     alignItems: 'center',
@@ -105,8 +108,8 @@ const style = StyleSheet.create({
     padding: 20,
   },
   photoWindow: {
-    width: 60,
-    height: 60,
+    height: height / 10,
+    aspectRatio: width/height,
   }
 })
 

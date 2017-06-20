@@ -18,9 +18,12 @@ class Cam extends Component {
   constructor(props) {
     super(props)
     this.takePicture = this.takePicture.bind(this)
-    this.flip = this.flip.bind(this)
+    this.flip        = this.flip.bind(this)
+    this.toggleFlash = this.toggleFlash.bind(this)
+
     this.state = {
       cameraType: Camera.constants.Type.back,
+      flashMode:  Camera.constants.FlashMode.off,
     }
   }
 
@@ -29,6 +32,14 @@ class Cam extends Component {
       cameraType: this.state.cameraType === Camera.constants.Type.back ?
         Camera.constants.Type.front :
         Camera.constants.Type.back
+    })
+  }
+
+  toggleFlash() {
+    this.setState({
+      flashMode: this.state.flashMode === Camera.constants.FlashMode.off ?
+        Camera.constants.FlashMode.on :
+        Camera.constants.FlashMode.off
     })
   }
 
@@ -68,6 +79,7 @@ class Cam extends Component {
     return (
       <View style={style.container}>
         <Camera style={style.photoWindow}
+          flashMode={this.state.flashMode}
           type={this.state.cameraType}
           ref={(cam) => { this.camera = cam }}
           aspect={Camera.constants.Aspect.fill}
@@ -78,6 +90,10 @@ class Cam extends Component {
 
         <TouchableOpacity style={style.flip} onPress={this.flip}>
           <Text>Flip Camera</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={style.flash} onPress={this.toggleFlash}>
+          <Text>Toggle Flash</Text>
         </TouchableOpacity>
       </View>
     )

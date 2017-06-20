@@ -6,7 +6,7 @@ export default function(state=initialState, action) {
     case 'outbox:add':
       return {
         ...state,
-        queue: state.queue.concat(+new Date)
+        queue: state.queue.concat(action.photo.uri)
       }
     default:
       return state

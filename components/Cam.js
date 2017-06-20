@@ -3,7 +3,7 @@
 import React, {Component} from 'react'
 import Camera             from 'react-native-camera'
 import {connect}          from 'react-redux'
-import {hello}            from '../actions/hello'
+import {add}              from '../actions/outbox'
 import {
   Dimensions,
   TouchableOpacity,
@@ -23,9 +23,10 @@ class Cam extends Component {
   takePicture() {
     console.warn('Taking picture...')
     this.camera.capture({metadata: {}}).then((data) => {
-      return this.upload(data.path)
+      return add(data.path)
     }).catch((err) => {
       console.error(err)
+      alert(err.message)
     })
   }
 

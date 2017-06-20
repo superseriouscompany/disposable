@@ -23,7 +23,7 @@ class Cam extends Component {
   takePicture() {
     console.warn('Taking picture...')
     this.camera.capture({metadata: {}}).then((data) => {
-      return add(data.path)
+      return this.props.addPhoto(data.path)
     }).catch((err) => {
       console.error(err)
       alert(err.message)
@@ -58,28 +58,10 @@ class Cam extends Component {
         <Camera style={style.photoWindow}
           ref={(cam) => { this.camera = cam }}
           aspect={Camera.constants.Aspect.fill}
-          captureTarget={Camera.constants.CaptureTarget.temp} />
+          captureTarget={Camera.constants.CaptureTarget.disk} />
         <TouchableOpacity style={style.hello} onPress={this.takePicture}>
           <Text>take photo</Text>
         </TouchableOpacity>
-
-        { __DEV__ ?
-          <View>
-            <TouchableOpacity style={{marginTop: 40}} onPress={this.props.hello}>
-              <Text>dispatch action</Text>
-            </TouchableOpacity>
-
-            { this.props.loading ?
-              <Text>Loading...</Text>
-            : null }
-
-            <View>
-              <Text>⌛: {JSON.stringify(this.props.requests.map((r, i) => i ))}</Text>
-              <Text>✅: {JSON.stringify(this.props.responses)}</Text>
-              <Text>💣: {JSON.stringify(this.props.errors)}</Text>
-            </View>
-          </View>
-        : null }
       </View>
     )
   }
@@ -91,8 +73,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    hello: () => {
-      dispatch(hello())
+    addPhoto:(photoUri) => {
+      dispatch(add(photoUri))
     }
   }
 }

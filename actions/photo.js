@@ -13,21 +13,25 @@ export function uploadPhoto(photo) {
       xhr.onreadystatechange = (e) => {
         if( xhr.readyState !== 4 ) { return; }
 
-        if( xhr.status < 299 ) {
-          console.warn(xhr.responseText)
-          const json = JSON.parse(xhr.responseText);
+        if( 200 <= xhr.status && xhr.status <= 299 ) {
+          console.warn(xhr.responseText, xhr.status)
+          let json;
+          try {
+            json = JSON.parse(xhr.responseText);
+          } catch(err) {
+            return reject(err)
+          }
           return resolve(json)
+        } else if( xhr.status === 0 ){
+          reject(new Error('Sync failed. You might not be connected to the internet?'))
         } else {
           reject(xhr.status + ': ' + xhr.responseText);
         }
       }
       xhr.open('POST', `${baseUrl}/photos`);
       xhr.send(body);
-    }).then(() => {
-      console.warn('Uploaded.')
     }).catch((err) => {
-      console.error(err)
-      alert(err.message)
+      throw err
     })
   }
 }

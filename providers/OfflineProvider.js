@@ -14,6 +14,7 @@ class OfflineProvider extends Component {
   constructor(props) {
     super(props)
     this.handleConnectionChange = this.handleConnectionChange.bind(this)
+    this.processQueue = this.processQueue.bind(this)
   }
 
   componentDidMount() {
@@ -26,20 +27,27 @@ class OfflineProvider extends Component {
 
   componentWillReceiveProps(props) {
     if( props.queue.length > this.props.queue.length ) {
-      props.queue.forEach((photo) => {
-        this.props.upload(photo).then((ok) => {
-          this.props.remove(photo.id)
-        }).catch((err) => {
-          console.warn('Photo failed to upload', err)
-          this.props.markFailure(photo.id)
-        })
-      })
+      this.processQueue(props.queue)
     }
+  }
+
+  processQueue(queue) {
+    queue.forEach((photo) => {
+      this.props.upload(photo).then((ok) => {
+        this.props.remove(photo.id)
+      }).catch((err) => {
+        console.warn('Photo failed to upload', err)
+        alert(err.message)
+        this.props.markFailure(photo.id)
+      })
+    })
   }
 
   handleConnectionChange(connected) {
     if( !connected ) { return console.warn('disconnected from the internet') }
-    if( connected ) { return console.warn('connected to the internet') }
+
+    console.warn('Connected to the internet, processing queue of', this.props.queue.length)
+    return this.processQueue(this.props.queue)
   }
 
   render() { return null }

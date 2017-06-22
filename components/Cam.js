@@ -4,6 +4,7 @@ import React, {Component} from 'react'
 import Camera             from 'react-native-camera'
 import {connect}          from 'react-redux'
 import {add}              from '../actions/outbox'
+import DeviceInfo         from 'react-native-device-info'
 import {
   Dimensions,
   TouchableOpacity,
@@ -20,11 +21,25 @@ class Cam extends Component {
     this.takePicture = this.takePicture.bind(this)
     this.flip        = this.flip.bind(this)
     this.toggleFlash = this.toggleFlash.bind(this)
+    this.wind        = this.wind.bind(this)
 
     this.state = {
       cameraType: Camera.constants.Type.back,
       flashMode:  Camera.constants.FlashMode.off,
     }
+  }
+
+  wind() {
+    this.setState({
+      winding: true,
+    })
+
+    setTimeout(() => {
+      this.setState({
+        winding: false
+      })
+      this.props.wind()
+    }, 1000)
   }
 
   flip() {
@@ -83,17 +98,35 @@ class Cam extends Component {
           type={this.state.cameraType}
           ref={(cam) => { this.camera = cam }}
           aspect={Camera.constants.Aspect.fill}
+          orientation={Camera.constants.Orientation.landscapeLeft}
           captureTarget={Camera.constants.CaptureTarget.disk} />
-        <TouchableOpacity style={style.hello} onPress={this.takePicture}>
-          <Text>take photo</Text>
-        </TouchableOpacity>
+
+        <View style={style.buttonCnr}>
+          { this.props.wound ?
+            <TouchableOpacity style={style.button} onPress={this.takePicture}>
+              <Text>🛑</Text>
+            </TouchableOpacity>
+          :
+            <TouchableOpacity style={style.wind} onPress={this.wind}>
+              <Text>
+                { this.state.winding ?
+                  'Winding...'
+                :
+                  `Wind (${this.props.photosRemaining})`
+                }
+              </Text>
+            </TouchableOpacity>
+          }
+        </View>
 
         <TouchableOpacity style={style.flip} onPress={this.flip}>
-          <Text>Flip Camera</Text>
+          <Text>🔄</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={style.flash} onPress={this.toggleFlash}>
-          <Text>Toggle Flash</Text>
+          <Text>
+            { this.state.flashMode === Camera.constants.FlashMode.off ? '📷' : '📸'}
+          </Text>
         </TouchableOpacity>
       </View>
     )
@@ -101,13 +134,21 @@ class Cam extends Component {
 }
 
 function mapStateToProps(state) {
-  return state.hello
+  return {
+    photosRemaining: state.camera.remaining,
+    wound:           state.camera.wound,
+  }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     addPhoto:(photoUri) => {
       dispatch(add(photoUri))
+      dispatch({type: 'camera:snap'})
+    },
+
+    wind:() => {
+      dispatch({type: 'camera:wind'})
     }
   }
 }
@@ -117,15 +158,24 @@ const {width, height} = Dimensions.get('window')
 const style = StyleSheet.create({
   container: {
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     flex: 1,
   },
-  hello: {
-    padding: 20,
+  buttonCnr: {
+    position: 'absolute',
+    right: 20,
+    top: 20,
+    alignItems: 'center',
   },
   photoWindow: {
+    marginTop: 20,
     height: height / 10,
     aspectRatio: width/height,
+  },
+  flip: {
+    position: 'absolute',
+    bottom: 20,
+    left: 20,
   }
 })
 

@@ -11,6 +11,7 @@ import {
 
 import hello  from './hello'
 import outbox from './outbox'
+import camera from './camera'
 
 const middleware = [thunk]
 if( __DEV__ ) {
@@ -20,6 +21,7 @@ if( __DEV__ ) {
 const reducers = combineReducers({
   hello,
   outbox,
+  camera,
 })
 
 const store = createStore(

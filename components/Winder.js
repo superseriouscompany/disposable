@@ -68,30 +68,42 @@ class Winder extends Component {
   }
 
   render() { return (
-    <View style={style.container}>
-      <Text style={style.hint}>&lt;&lt;&lt; slide wheel left</Text>
-
-      <View style={style.wheel} {...this._panResponder.panHandlers}>
-        <Text style={[style.gear, {
-          transform: [
-            { rotate: `${(this.state.wind / 10) % 360}deg` }
-          ]
-        }]}>⚙</Text>
-      </View>
-
-      <View style={style.progressCnr}>
-        <View style={[style.progress, {
-          width: `${Math.min(1, this.state.wind / 10000) * 100}%`,
-        }]} />
-      </View>
-
-      <Text style={style.count}>{this.props.photosRemaining} Photos Left</Text>
-
-      { __DEV__ ?
-        <Text style={style.count}>{this.state.wind}</Text>
+    <View style={{flex: 1}}>
+      { !this.props.photosRemaining ?
+        <View style={style.spentCnr}>
+          <Text style={style.spent}>
+            ⏳
+          </Text>
+          <Text style={{textAlign: 'center'}}>You've used up all your film!{"\n\n"}Check back in 3 days for your photos.</Text>
+        </View>
       :
-        null
+        <View style={style.container}>
+          <Text style={style.hint}>&lt;&lt;&lt; slide wheel left</Text>
+
+          <View style={style.wheel} {...this._panResponder.panHandlers}>
+            <Text style={[style.gear, {
+              transform: [
+                { rotate: `${(this.state.wind / 10) % 360}deg` }
+              ]
+            }]}>⚙</Text>
+          </View>
+
+          <View style={style.progressCnr}>
+            <View style={[style.progress, {
+              width: `${Math.min(1, this.state.wind / 10000) * 100}%`,
+            }]} />
+          </View>
+
+          <Text style={style.count}>{this.props.photosRemaining} Photos Left</Text>
+
+          { __DEV__ ?
+            <Text style={style.count}>{this.state.wind}</Text>
+          :
+            null
+          }
+        </View>
       }
+
     </View>
   )}
 }
@@ -143,6 +155,11 @@ const style = StyleSheet.create({
   progress: {
     backgroundColor: 'hotpink',
     height: '100%',
+  },
+
+  spent: {
+    fontSize: 120,
+    textAlign: 'center',
   },
 })
 

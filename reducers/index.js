@@ -9,7 +9,6 @@ import {
   combineReducers,
 } from 'redux'
 
-import hello  from './hello'
 import outbox from './outbox'
 import camera from './camera'
 
@@ -19,7 +18,6 @@ if( __DEV__ ) {
 }
 
 const reducers = combineReducers({
-  hello,
   outbox,
   camera,
 })
@@ -35,6 +33,7 @@ const store = createStore(
 
 const persistence = persistStore(store, {storage: AsyncStorage, whitelist: [
   'outbox',
+  'camera',
 ]})
 
 export default store

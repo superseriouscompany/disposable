@@ -26,15 +26,11 @@ class OfflineProvider extends Component {
 
   componentWillReceiveProps(props) {
     if( props.queue.length > this.props.queue.length ) {
-      this.props.dispatch({type: 'outbox:clear'})
-
-      return
       props.queue.forEach((photo) => {
-        this.props.upload().then((ok) => {
-          console.warn('photo uploaded. removing.')
+        this.props.upload(photo).then((ok) => {
           this.props.remove(photo.id)
         }).catch((err) => {
-          console.warn('photo failed to upload', err)
+          console.warn('Photo failed to upload', err)
           this.props.markFailure(photo.id)
         })
       })
@@ -51,8 +47,8 @@ class OfflineProvider extends Component {
 
 function mapDispatchToProps(dispatch) {
   return {
-    upload: (uri) => {
-      return dispatch(uploadPhoto({uri}))
+    upload: (photo) => {
+      return dispatch(uploadPhoto(photo))
     },
 
     markFailure: (id) => {
@@ -62,6 +58,8 @@ function mapDispatchToProps(dispatch) {
     remove: (id) => {
       return dispatch(remove(id))
     },
+
+    dispatch: dispatch,
   }
 }
 

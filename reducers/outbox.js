@@ -6,11 +6,11 @@ export default function(state=initialState, action) {
     case 'outbox:add':
       return {
         ...state,
-        queue: state.queue.shift({
+        queue: [{
           ...action.photo,
           id: +new Date,
           taken_at: +new Date,
-        })
+        }].concat(state.queue)
       }
     case 'outbox:remove':
       return {

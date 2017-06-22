@@ -77,7 +77,7 @@ class Cam extends Component {
           ref={(cam) => { this.camera = cam }}
           aspect={Camera.constants.Aspect.fill}
           orientation={Camera.constants.Orientation.landscapeLeft}
-          captureTarget={Camera.constants.CaptureTarget.temp} />
+          captureTarget={Camera.constants.CaptureTarget.disk} />
 
         <View style={style.buttonCnr}>
           { this.props.wound ?

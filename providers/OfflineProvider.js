@@ -46,6 +46,8 @@ class OfflineProvider extends Component {
   handleConnectionChange(connected) {
     if( !connected ) { return console.warn('disconnected from the internet') }
 
+    if( !this.props.queue.length ) { return }
+
     console.warn('Connected to the internet, processing queue of', this.props.queue.length)
     return this.processQueue(this.props.queue)
   }

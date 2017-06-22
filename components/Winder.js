@@ -53,12 +53,11 @@ class Winder extends Component {
       onPanResponderTerminationRequest: (evt, gestureState) => true,
 
       onPanResponderRelease: (evt, gestureState) => {
-        console.warn('released')
         // The user has released all touches while this view is the
         // responder. This typically means a gesture has succeeded
       },
       onPanResponderTerminate: (evt, gestureState) => {
-        console.warn('terminated')
+        console.warn('gesture terminated')
         // Another component has become the responder, so this gesture
         // should be cancelled
       },
@@ -70,6 +69,8 @@ class Winder extends Component {
 
   render() { return (
     <View style={style.container}>
+      <Text style={style.hint}>&lt;&lt;&lt; slide wheel left</Text>
+
       <View style={style.wheel} {...this._panResponder.panHandlers}>
         <Text style={[style.gear, {
           transform: [
@@ -78,8 +79,19 @@ class Winder extends Component {
         }]}>⚙</Text>
       </View>
 
-      <Text style={style.count}>{this.props.photosRemaining}</Text>
-      <Text style={style.count}>{this.state.wind}</Text>
+      <View style={style.progressCnr}>
+        <View style={[style.progress, {
+          width: `${Math.min(1, this.state.wind / 10000) * 100}%`,
+        }]} />
+      </View>
+
+      <Text style={style.count}>{this.props.photosRemaining} Photos Left</Text>
+
+      { __DEV__ ?
+        <Text style={style.count}>{this.state.wind}</Text>
+      :
+        null
+      }
     </View>
   )}
 }
@@ -114,6 +126,21 @@ const style = StyleSheet.create({
 
   gear: {
     fontSize: 90,
+  },
+
+  progressCnr: {
+    width: '40%',
+    height: '5%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 5,
+  },
+
+  progress: {
+    backgroundColor: 'hotpink',
+    height: '100%',
   },
 })
 

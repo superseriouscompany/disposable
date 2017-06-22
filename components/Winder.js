@@ -136,6 +136,8 @@ const style = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ddd',
     borderRadius: 5,
+    marginTop: 20,
+    marginBottom: 20,
   },
 
   progress: {

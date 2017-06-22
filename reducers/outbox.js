@@ -6,8 +6,32 @@ export default function(state=initialState, action) {
     case 'outbox:add':
       return {
         ...state,
-        queue: state.queue.concat(action.photo.uri)
+        queue: state.queue.shift({
+          ...action.photo,
+          id: +new Date,
+          taken_at: +new Date,
+        })
       }
+    case 'outbox:remove':
+      return {
+        ...state,
+        queue: state.queue.filter((i) => {
+          return i.id !== action.id
+        })
+      }
+    case 'outbox:markFailure':
+      return {
+        ...state,
+        queue: state.queue.map((i) => {
+          if( i.id !== action.id ) { return i; }
+          i.failureCount = (i.failureCount || 0) + 1
+          i.lastFailure  = new Date
+          return i
+        })
+      }
+
+    case 'outbox:clear':
+      return initialState
     default:
       return state
   }

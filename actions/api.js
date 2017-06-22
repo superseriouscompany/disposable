@@ -1,4 +1,4 @@
-const baseUrl = __DEV__ ?
+export const baseUrl = __DEV__ ?
   'https://superserious.ngrok.io' :
   'https://disposable.superserious.co';
 

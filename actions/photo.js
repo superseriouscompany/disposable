@@ -1,12 +1,13 @@
 'use strict'
 
-import api from './api'
+import {baseUrl} from './api'
 
-export function upload(photo) {
+export function uploadPhoto(photo) {
   return function(dispatch) {
     return new Promise((resolve, reject) => {
       var body = new FormData();
-      body.append('photo', {uri: photo.uri, name: 'photo.jpg', type: 'image/jpeg'});
+
+      body.append('photo', {uri: `file://${photo.uri}`, name: 'photo.jpg', type: 'image/jpeg'});
 
       var xhr = new XMLHttpRequest;
       xhr.onreadystatechange = (e) => {
@@ -28,7 +29,5 @@ export function upload(photo) {
       console.error(err)
       alert(err.message)
     })
-
-    dispatch({type: 'outbox:add' })
   }
 }

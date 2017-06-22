@@ -68,28 +68,6 @@ class Cam extends Component {
     })
   }
 
-  upload(imageUri) {
-    return new Promise((resolve, reject) => {
-      var body = new FormData();
-      body.append('photo', {uri: imageUri, name: 'photo.jpg', type: 'image/jpeg'});
-
-      var xhr = new XMLHttpRequest;
-      xhr.onreadystatechange = (e) => {
-        if( xhr.readyState !== 4 ) { return; }
-
-        if( xhr.status < 299 ) {
-          console.warn(xhr.responseText)
-          const json = JSON.parse(xhr.responseText);
-          return resolve(json)
-        } else {
-          reject(xhr.status + ': ' + xhr.responseText);
-        }
-      }
-      xhr.open('POST', `${baseUrl}/photos`);
-      xhr.send(body);
-    })
-  }
-
   render() {
     return (
       <View style={style.container}>
@@ -99,7 +77,7 @@ class Cam extends Component {
           ref={(cam) => { this.camera = cam }}
           aspect={Camera.constants.Aspect.fill}
           orientation={Camera.constants.Orientation.landscapeLeft}
-          captureTarget={Camera.constants.CaptureTarget.disk} />
+          captureTarget={Camera.constants.CaptureTarget.temp} />
 
         <View style={style.buttonCnr}>
           { this.props.wound ?

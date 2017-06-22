@@ -70,21 +70,20 @@ class Cam extends Component {
               orientation={Camera.constants.Orientation.landscapeLeft}
               captureTarget={Camera.constants.CaptureTarget.disk} />
 
-            <View style={style.buttonCnr}>
-              { this.props.wound ?
-                <TouchableOpacity style={style.button} onPress={this.takePicture}>
-                  <Text>🛑</Text>
-                </TouchableOpacity>
-              : null
-              }
+            <View style={style.hintCnr}>
+              <Text style={style.hint}>
+                Tap anywhere to take the picture
+              </Text>
             </View>
 
-            <TouchableOpacity style={style.flip} onPress={this.flip}>
-              <Text>🔄</Text>
+            <TouchableOpacity style={style.overlay} onPress={this.takePicture} />
+
+            <TouchableOpacity style={[style.buttonCnr, style.flip]} onPress={this.flip}>
+              <Text style={style.button}>🔄</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={style.flash} onPress={this.toggleFlash}>
-              <Text>
+            <TouchableOpacity style={[style.buttonCnr, style.flash]} onPress={this.toggleFlash}>
+              <Text style={style.button}>
                 { this.state.flashMode === Camera.constants.FlashMode.off ? '📷' : '📸'}
               </Text>
             </TouchableOpacity>
@@ -114,26 +113,53 @@ const {width, height} = Dimensions.get('window')
 
 const style = StyleSheet.create({
   container: {
-    alignItems: 'center',
-    justifyContent: 'flex-start',
     flex: 1,
   },
-  buttonCnr: {
-    position: 'absolute',
-    right: 20,
-    top: 20,
-    alignItems: 'center',
-  },
   photoWindow: {
-    marginTop: 20,
-    height: height / 10,
-    aspectRatio: width/height,
+    width: '100%',
+    height: '100%',
+  },
+  overlay: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    backgroundColor: 'transparent',
+    width: '100%',
+    height: '100%',
+  },
+  buttonCnr: {
+    backgroundColor: 'rgba(0,0,0,0.7)',
+    padding: 10,
+    justifyContent:  'center',
+    alignItems:      'center',
+    position: 'absolute',
+    bottom: 30,
+    borderRadius: 10,
+  },
+  button: {
+    fontSize: 30,
   },
   flip: {
+    left: 30,
+  },
+  flash: {
+    right: 30,
+  },
+  hintCnr: {
     position: 'absolute',
-    bottom: 20,
-    left: 20,
-  }
+    top: 30,
+    width: '100%',
+    alignItems: 'center',
+  },
+  hint: {
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 5,
+    paddingRight: 5,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    color: 'white',
+    textAlign: 'center',
+  },
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cam)

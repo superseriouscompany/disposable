@@ -3,6 +3,8 @@
 import React, {Component} from 'react'
 import {connect}          from 'react-redux';
 import {
+  PanResponder,
+  StyleSheet,
   TouchableOpacity,
   Text,
   View,
@@ -12,36 +14,73 @@ class Winder extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      winding: false,
+      wind: 0,
     }
 
     this.wind = this.wind.bind(this)
   }
 
-  wind() {
-    this.setState({
-      winding: true,
-    })
+  wind(amount) {
+    const wind = this.state.wind + amount
 
-    setTimeout(() => {
+    if( this.state.wind < 10000 ) {
       this.setState({
-        winding: false
+        wind: this.state.wind + amount,
       })
+    } else {
       this.props.wind()
-    }, 1000)
+    }
+  }
+
+  componentWillMount() {
+    this._panResponder = PanResponder.create({
+      // Ask to be the responder:
+      onStartShouldSetPanResponder: (evt, gestureState) => true,
+      onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
+      onMoveShouldSetPanResponder: (evt, gestureState) => true,
+      onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
+
+      onPanResponderGrant: (evt, gestureState) => {
+      },
+
+      onPanResponderMove: (evt, gestureState) => {
+        // only count left movement
+        if( gestureState.vx > 0 ) { return }
+
+        this.wind(gestureState.x0 - gestureState.moveX)
+      },
+
+      onPanResponderTerminationRequest: (evt, gestureState) => true,
+
+      onPanResponderRelease: (evt, gestureState) => {
+        console.warn('released')
+        // The user has released all touches while this view is the
+        // responder. This typically means a gesture has succeeded
+      },
+      onPanResponderTerminate: (evt, gestureState) => {
+        console.warn('terminated')
+        // Another component has become the responder, so this gesture
+        // should be cancelled
+      },
+      onShouldBlockNativeResponder: (evt, gestureState) => {
+        return true;
+      },
+    })
   }
 
   render() { return (
-    <TouchableOpacity onPress={this.wind}>
-      <Text>
-        { this.state.winding ?
-          'Winding...'
-        :
-          `Wind (${this.props.photosRemaining})`
-        }
-      </Text>
-    </TouchableOpacity>
+    <View style={style.container}>
+      <View style={style.wheel} {...this._panResponder.panHandlers}>
+        <Text style={[style.gear, {
+          transform: [
+            { rotate: `${(this.state.wind / 10) % 360}deg` }
+          ]
+        }]}>⚙</Text>
+      </View>
 
+      <Text style={style.count}>{this.props.photosRemaining}</Text>
+      <Text style={style.count}>{this.state.wind}</Text>
+    </View>
   )}
 }
 
@@ -59,5 +98,23 @@ function mapDispatchToProps(dispatch) {
     }
   }
 }
+
+const style = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  wheel: {
+    backgroundColor: 'transparent',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  gear: {
+    fontSize: 90,
+  },
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(Winder);

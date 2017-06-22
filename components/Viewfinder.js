@@ -45,7 +45,6 @@ class Viewfinder extends Component {
   }
 
   takePicture() {
-    console.warn('Taking picture...')
     this.camera.capture({metadata: {}}).then((data) => {
       return this.props.addPhoto(data.path)
     }).catch((err) => {

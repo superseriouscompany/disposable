@@ -62,7 +62,7 @@ class Viewfinder extends Component {
           type={this.state.cameraType}
           ref={(cam) => { this.camera = cam }}
           aspect={Camera.constants.Aspect.fill}
-          orientation={Camera.constants.Orientation.landscapeLeft}
+          orientation={Camera.constants.Orientation.landscapeRight}
           captureTarget={Camera.constants.CaptureTarget.disk} />
 
         <View style={style.hintCnr}>

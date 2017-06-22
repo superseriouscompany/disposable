@@ -5,6 +5,7 @@ import Camera             from 'react-native-camera'
 import {connect}          from 'react-redux'
 import {add}              from '../actions/outbox'
 import DeviceInfo         from 'react-native-device-info'
+import Winder             from './Winder';
 import {
   Dimensions,
   TouchableOpacity,
@@ -21,25 +22,11 @@ class Cam extends Component {
     this.takePicture = this.takePicture.bind(this)
     this.flip        = this.flip.bind(this)
     this.toggleFlash = this.toggleFlash.bind(this)
-    this.wind        = this.wind.bind(this)
 
     this.state = {
       cameraType: Camera.constants.Type.back,
       flashMode:  Camera.constants.FlashMode.off,
     }
-  }
-
-  wind() {
-    this.setState({
-      winding: true,
-    })
-
-    setTimeout(() => {
-      this.setState({
-        winding: false
-      })
-      this.props.wind()
-    }, 1000)
   }
 
   flip() {
@@ -71,41 +58,38 @@ class Cam extends Component {
   render() {
     return (
       <View style={style.container}>
-        <Camera style={style.photoWindow}
-          flashMode={this.state.flashMode}
-          type={this.state.cameraType}
-          ref={(cam) => { this.camera = cam }}
-          aspect={Camera.constants.Aspect.fill}
-          orientation={Camera.constants.Orientation.landscapeLeft}
-          captureTarget={Camera.constants.CaptureTarget.disk} />
+        { !this.props.wound ?
+          <Winder />
+        :
+          <View style={{flex: 1}}>
+            <Camera style={style.photoWindow}
+              flashMode={this.state.flashMode}
+              type={this.state.cameraType}
+              ref={(cam) => { this.camera = cam }}
+              aspect={Camera.constants.Aspect.fill}
+              orientation={Camera.constants.Orientation.landscapeLeft}
+              captureTarget={Camera.constants.CaptureTarget.disk} />
 
-        <View style={style.buttonCnr}>
-          { this.props.wound ?
-            <TouchableOpacity style={style.button} onPress={this.takePicture}>
-              <Text>🛑</Text>
+            <View style={style.buttonCnr}>
+              { this.props.wound ?
+                <TouchableOpacity style={style.button} onPress={this.takePicture}>
+                  <Text>🛑</Text>
+                </TouchableOpacity>
+              : null
+              }
+            </View>
+
+            <TouchableOpacity style={style.flip} onPress={this.flip}>
+              <Text>🔄</Text>
             </TouchableOpacity>
-          :
-            <TouchableOpacity style={style.wind} onPress={this.wind}>
+
+            <TouchableOpacity style={style.flash} onPress={this.toggleFlash}>
               <Text>
-                { this.state.winding ?
-                  'Winding...'
-                :
-                  `Wind (${this.props.photosRemaining})`
-                }
+                { this.state.flashMode === Camera.constants.FlashMode.off ? '📷' : '📸'}
               </Text>
             </TouchableOpacity>
-          }
-        </View>
-
-        <TouchableOpacity style={style.flip} onPress={this.flip}>
-          <Text>🔄</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={style.flash} onPress={this.toggleFlash}>
-          <Text>
-            { this.state.flashMode === Camera.constants.FlashMode.off ? '📷' : '📸'}
-          </Text>
-        </TouchableOpacity>
+          </View>
+        }
       </View>
     )
   }
@@ -113,8 +97,7 @@ class Cam extends Component {
 
 function mapStateToProps(state) {
   return {
-    photosRemaining: state.camera.remaining,
-    wound:           state.camera.wound,
+    wound: state.camera.wound,
   }
 }
 
@@ -124,10 +107,6 @@ function mapDispatchToProps(dispatch) {
       dispatch(add(photoUri))
       dispatch({type: 'camera:snap'})
     },
-
-    wind:() => {
-      dispatch({type: 'camera:wind'})
-    }
   }
 }
 

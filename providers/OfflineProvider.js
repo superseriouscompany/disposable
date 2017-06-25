@@ -37,7 +37,6 @@ class OfflineProvider extends Component {
         this.props.remove(photo.id)
       }).catch((err) => {
         console.warn('Photo failed to upload', err)
-        alert(err.message)
         this.props.markFailure(photo.id)
       })
     })

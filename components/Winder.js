@@ -1,7 +1,8 @@
 'use strict'
 
 import React, {Component} from 'react'
-import {connect}          from 'react-redux';
+import {connect}          from 'react-redux'
+import Banner             from './Banner'
 import {
   PanResponder,
   StyleSheet,
@@ -78,6 +79,7 @@ class Winder extends Component {
         </View>
       :
         <View style={style.container}>
+          <Banner />
           <Text style={style.hint}>&lt;&lt;&lt; slide wheel left</Text>
 
           <View style={style.wheel} {...this._panResponder.panHandlers}>
@@ -101,6 +103,7 @@ class Winder extends Component {
           :
             null
           }
+
         </View>
       }
 

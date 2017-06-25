@@ -176,6 +176,7 @@ const style = StyleSheet.create({
     borderRadius: 5,
     flex: 1,
     marginRight: 5,
+    overflow: 'hidden',
   },
 
   progress: {

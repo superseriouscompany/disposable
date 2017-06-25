@@ -39,17 +39,14 @@ export default class SwipeHint extends Component {
         transform: [{
           translateX: this.state.anim.interpolate({
             inputRange:  [0, 1],
-            outputRange: [100, -100],
+            outputRange: [30, -100],
           }),
         }],
         opacity: this.state.anim.interpolate({
-          inputRange:  [0, 0.6, 1],
+          inputRange:  [0, 0.8, 1],
           outputRange: [1, 1, 0],
         }),
-        color: this.state.anim.interpolate({
-          inputRange: [0, 1],
-          outputRange: ['black', '#ffc50c']
-        })
+        color: '#ffc50c',
       }]}>
         { props.hidden ? null : 'swipe left to wind' }
       </Animated.Text>

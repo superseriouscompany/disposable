@@ -7,6 +7,7 @@ import SwipeHint          from './SwipeHint';
 import DevPanel           from './DevPanel';
 
 import {
+  Image,
   PanResponder,
   StyleSheet,
   TouchableOpacity,
@@ -94,13 +95,13 @@ class Winder extends Component {
         :
           <View style={style.container} {...this._panResponder.panHandlers}>
             <Banner />
-            <SwipeHint style={style.hint} hidden={this.state.activated}/>
             <View style={style.wheel}>
-              <Text style={[style.gear, {
+              <SwipeHint style={style.hint} hidden={this.state.activated}/>
+              <Image source={require('../images/Wheel.png')} style={[style.gear, {
                 transform: [
                   { rotate: `${(this.state.wind / 10) % 360}deg` }
                 ]
-              }]}>⚙</Text>
+              }]} />
             </View>
 
             <View style={style.statusCnr}>
@@ -154,12 +155,14 @@ const style = StyleSheet.create({
   },
 
   gear: {
-    fontSize: 90,
+    width: 40,
+    aspectRatio: 1,
   },
 
   hint: {
     position: 'absolute',
-    top: 60,
+    zIndex: 1,
+    backgroundColor: 'transparent',
   },
 
   statusCnr: {

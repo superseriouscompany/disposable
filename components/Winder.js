@@ -4,6 +4,7 @@ import React, {Component} from 'react'
 import {connect}          from 'react-redux'
 import Banner             from './Banner'
 import {
+  Animated,
   PanResponder,
   StyleSheet,
   TouchableOpacity,
@@ -18,9 +19,12 @@ class Winder extends Component {
     super(props)
     this.state = {
       wind: 0,
+      hintAnim:  new Animated.Value(0),
+      activated: false,
     }
 
-    this.wind = this.wind.bind(this)
+    this.wind  = this.wind.bind(this)
+    this.pulse = this.pulse.bind(this)
   }
 
   wind(amount) {
@@ -29,6 +33,7 @@ class Winder extends Component {
     if( this.state.wind < THRESH ) {
       this.setState({
         wind: this.state.wind + amount,
+        activated: true,
       })
     } else {
       this.props.wind()
@@ -74,6 +79,20 @@ class Winder extends Component {
     })
   }
 
+  componentDidMount() {
+    this.pulse()
+  }
+
+  pulse() {
+    if( this.state.activated ) { return }
+    this.state.hintAnim.setValue(0)
+    Animated.timing(this.state.hintAnim, {
+      toValue:  1, duration: 2000,
+    }).start(() => {
+      setTimeout(this.pulse, 500)
+    })
+  }
+
   render() {
     const {props} = this
 
@@ -89,7 +108,18 @@ class Winder extends Component {
         :
           <View style={style.container} {...this._panResponder.panHandlers}>
             <Banner />
-            <Text style={style.hint}>&lt;&lt;&lt; slide wheel left</Text>
+            <Animated.Text style={[style.hint, {
+              transform: [{
+                translateX: this.state.hintAnim.interpolate({
+                  inputRange:  [0, 1],
+                  outputRange: [100, -100],
+                }),
+              }],
+              opacity: this.state.hintAnim.interpolate({
+                inputRange:  [0, 0.6, 1],
+                outputRange: [1, 1, 0],
+              })
+            }]}>swipe left to wind</Animated.Text>
 
             <View style={style.wheel}>
               <Text style={[style.gear, {
@@ -99,24 +129,19 @@ class Winder extends Component {
               }]}>⚙</Text>
             </View>
 
-            <View style={style.progressCnr}>
-              <View style={[style.progress, {
-                width: `${Math.min(1, props.photosRemaining / props.totalPhotos) * 100}%`,
-              }]}>
-                <View style={[style.progress, style.complete, {
-                  width: `${Math.min(1, this.state.wind / THRESH) * 100}%`,
-                }]} />
+            <View style={style.statusCnr}>
+              <View style={style.progressCnr}>
+                <View style={[style.progress, {
+                  width: `${Math.min(1, props.photosRemaining / props.totalPhotos) * 100}%`,
+                }]}>
+                  <View style={[style.progress, style.complete, {
+                    width: `${Math.min(1, this.state.wind / THRESH) * 100}%`,
+                  }]} />
+                </View>
               </View>
+
+              <Text style={style.count}>{this.props.photosRemaining} left</Text>
             </View>
-
-            <Text style={style.count}>{this.props.photosRemaining} Photos Left</Text>
-
-            { __DEV__ ?
-              <Text style={style.count}>{this.state.wind}</Text>
-            :
-              null
-            }
-
           </View>
         }
 
@@ -158,16 +183,27 @@ const style = StyleSheet.create({
     fontSize: 90,
   },
 
-  progressCnr: {
+  hint: {
+    position: 'absolute',
+    top: 60,
+  },
+
+  statusCnr: {
     width: '40%',
     height: '5%',
     marginLeft: 'auto',
     marginRight: 'auto',
+    marginTop: 20,
+    marginBottom: 20,
+    flexDirection: 'row',
+  },
+
+  progressCnr: {
     borderWidth: 1,
     borderColor: '#ddd',
     borderRadius: 5,
-    marginTop: 20,
-    marginBottom: 20,
+    flex: 1,
+    marginRight: 5,
   },
 
   progress: {

@@ -11,6 +11,8 @@ import {
   View,
 } from 'react-native'
 
+const THRESH = 1000
+
 class Winder extends Component {
   constructor(props) {
     super(props)
@@ -24,7 +26,7 @@ class Winder extends Component {
   wind(amount) {
     const wind = this.state.wind + amount
 
-    if( this.state.wind < 10000 ) {
+    if( this.state.wind < THRESH ) {
       this.setState({
         wind: this.state.wind + amount,
       })
@@ -34,6 +36,8 @@ class Winder extends Component {
   }
 
   componentWillMount() {
+    var lastX;
+
     this._panResponder = PanResponder.create({
       // Ask to be the responder:
       onStartShouldSetPanResponder: (evt, gestureState) => true,
@@ -42,13 +46,15 @@ class Winder extends Component {
       onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
 
       onPanResponderGrant: (evt, gestureState) => {
+        lastX = null
       },
 
       onPanResponderMove: (evt, gestureState) => {
-        // only count left movement
-        if( gestureState.vx > 0 ) { return }
-
-        this.wind(gestureState.x0 - gestureState.moveX)
+        // only wind on left movement
+        if( gestureState.vx < 0 ) {
+          this.wind((lastX || gestureState.x0) - gestureState.moveX)
+        }
+        lastX = gestureState.moveX
       },
 
       onPanResponderTerminationRequest: (evt, gestureState) => true,
@@ -78,11 +84,11 @@ class Winder extends Component {
           <Text style={{textAlign: 'center'}}>You've used up all your film!{"\n\n"}Check back in 3 days for your photos.</Text>
         </View>
       :
-        <View style={style.container}>
+        <View style={style.container} {...this._panResponder.panHandlers}>
           <Banner />
           <Text style={style.hint}>&lt;&lt;&lt; slide wheel left</Text>
 
-          <View style={style.wheel} {...this._panResponder.panHandlers}>
+          <View style={style.wheel}>
             <Text style={[style.gear, {
               transform: [
                 { rotate: `${(this.state.wind / 10) % 360}deg` }
@@ -92,7 +98,7 @@ class Winder extends Component {
 
           <View style={style.progressCnr}>
             <View style={[style.progress, {
-              width: `${Math.min(1, this.state.wind / 10000) * 100}%`,
+              width: `${Math.min(1, this.state.wind / THRESH) * 100}%`,
             }]} />
           </View>
 

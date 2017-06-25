@@ -3,8 +3,8 @@
 import React, {Component} from 'react'
 import {connect}          from 'react-redux'
 import Banner             from './Banner'
+import SwipeHint          from './SwipeHint';
 import {
-  Animated,
   PanResponder,
   StyleSheet,
   TouchableOpacity,
@@ -19,12 +19,10 @@ class Winder extends Component {
     super(props)
     this.state = {
       wind: 0,
-      hintAnim:  new Animated.Value(0),
       activated: false,
     }
 
     this.wind  = this.wind.bind(this)
-    this.pulse = this.pulse.bind(this)
   }
 
   wind(amount) {
@@ -79,20 +77,6 @@ class Winder extends Component {
     })
   }
 
-  componentDidMount() {
-    this.pulse()
-  }
-
-  pulse() {
-    if( this.state.activated ) { return }
-    this.state.hintAnim.setValue(0)
-    Animated.timing(this.state.hintAnim, {
-      toValue:  1, duration: 2000,
-    }).start(() => {
-      setTimeout(this.pulse, 500)
-    })
-  }
-
   render() {
     const {props} = this
 
@@ -108,19 +92,7 @@ class Winder extends Component {
         :
           <View style={style.container} {...this._panResponder.panHandlers}>
             <Banner />
-            <Animated.Text style={[style.hint, {
-              transform: [{
-                translateX: this.state.hintAnim.interpolate({
-                  inputRange:  [0, 1],
-                  outputRange: [100, -100],
-                }),
-              }],
-              opacity: this.state.hintAnim.interpolate({
-                inputRange:  [0, 0.6, 1],
-                outputRange: [1, 1, 0],
-              })
-            }]}>swipe left to wind</Animated.Text>
-
+            <SwipeHint style={style.hint} hidden={this.state.activated}/>
             <View style={style.wheel}>
               <Text style={[style.gear, {
                 transform: [

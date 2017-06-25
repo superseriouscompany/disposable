@@ -4,6 +4,8 @@ import React, {Component} from 'react'
 import {connect}          from 'react-redux'
 import Banner             from './Banner'
 import SwipeHint          from './SwipeHint';
+import DevPanel           from './DevPanel';
+
 import {
   PanResponder,
   StyleSheet,
@@ -116,7 +118,7 @@ class Winder extends Component {
             </View>
           </View>
         }
-
+        <DevPanel />
       </View>
     )
   }

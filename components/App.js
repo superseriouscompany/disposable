@@ -5,6 +5,7 @@ import {Provider}         from 'react-redux'
 import store              from '../reducers'
 import OfflineProvider    from '../providers/OfflineProvider'
 import Cam                from './Cam'
+import DevPanel           from './DevPanel'
 import {
   View,
 } from 'react-native'

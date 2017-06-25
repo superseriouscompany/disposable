@@ -74,52 +74,61 @@ class Winder extends Component {
     })
   }
 
-  render() { return (
-    <View style={{flex: 1}}>
-      { !this.props.photosRemaining ?
-        <View style={style.spentCnr}>
-          <Text style={style.spent}>
-            ⏳
-          </Text>
-          <Text style={{textAlign: 'center'}}>You've used up all your film!{"\n\n"}Check back in 3 days for your photos.</Text>
-        </View>
-      :
-        <View style={style.container} {...this._panResponder.panHandlers}>
-          <Banner />
-          <Text style={style.hint}>&lt;&lt;&lt; slide wheel left</Text>
+  render() {
+    const {props} = this
 
-          <View style={style.wheel}>
-            <Text style={[style.gear, {
-              transform: [
-                { rotate: `${(this.state.wind / 10) % 360}deg` }
-              ]
-            }]}>⚙</Text>
+    return (
+      <View style={{flex: 1}}>
+        { !this.props.photosRemaining ?
+          <View style={style.spentCnr}>
+            <Text style={style.spent}>
+              ⏳
+            </Text>
+            <Text style={{textAlign: 'center'}}>You've used up all your film!{"\n\n"}Check back in 3 days for your photos.</Text>
           </View>
+        :
+          <View style={style.container} {...this._panResponder.panHandlers}>
+            <Banner />
+            <Text style={style.hint}>&lt;&lt;&lt; slide wheel left</Text>
 
-          <View style={style.progressCnr}>
-            <View style={[style.progress, {
-              width: `${Math.min(1, this.state.wind / THRESH) * 100}%`,
-            }]} />
+            <View style={style.wheel}>
+              <Text style={[style.gear, {
+                transform: [
+                  { rotate: `${(this.state.wind / 10) % 360}deg` }
+                ]
+              }]}>⚙</Text>
+            </View>
+
+            <View style={style.progressCnr}>
+              <View style={[style.progress, {
+                width: `${Math.min(1, props.photosRemaining / props.totalPhotos) * 100}%`,
+              }]}>
+                <View style={[style.progress, style.complete, {
+                  width: `${Math.min(1, this.state.wind / THRESH) * 100}%`,
+                }]} />
+              </View>
+            </View>
+
+            <Text style={style.count}>{this.props.photosRemaining} Photos Left</Text>
+
+            { __DEV__ ?
+              <Text style={style.count}>{this.state.wind}</Text>
+            :
+              null
+            }
+
           </View>
+        }
 
-          <Text style={style.count}>{this.props.photosRemaining} Photos Left</Text>
-
-          { __DEV__ ?
-            <Text style={style.count}>{this.state.wind}</Text>
-          :
-            null
-          }
-
-        </View>
-      }
-
-    </View>
-  )}
+      </View>
+    )
+  }
 }
 
 function mapStateToProps(state) {
   return {
     photosRemaining: state.camera.remaining,
+    totalPhotos:     state.camera.total,
     wound:           state.camera.wound,
   }
 }
@@ -162,8 +171,15 @@ const style = StyleSheet.create({
   },
 
   progress: {
-    backgroundColor: 'hotpink',
+    backgroundColor: 'black',
     height: '100%',
+  },
+
+  complete: {
+    backgroundColor: '#ffc50c',
+    position: 'absolute',
+    left: 0,
+    top: 0,
   },
 
   spent: {

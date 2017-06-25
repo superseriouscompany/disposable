@@ -45,6 +45,10 @@ export default class SwipeHint extends Component {
         opacity: this.state.anim.interpolate({
           inputRange:  [0, 0.6, 1],
           outputRange: [1, 1, 0],
+        }),
+        color: this.state.anim.interpolate({
+          inputRange: [0, 1],
+          outputRange: ['black', '#ffc50c']
         })
       }]}>
         { props.hidden ? null : 'swipe left to wind' }

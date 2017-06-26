@@ -47,8 +47,6 @@ const style = StyleSheet.create({
   },
 
   fields: {
-    // flex: 1,
-    // justifyContent: 'center',
     paddingLeft: '20%',
     paddingRight: '20%',
   },

@@ -4,8 +4,7 @@ import React, {Component} from 'react'
 import {Provider}         from 'react-redux'
 import store              from '../reducers'
 import OfflineProvider    from '../providers/OfflineProvider'
-import Cam                from './Cam'
-import DevPanel           from './DevPanel'
+import Stage              from './Stage'
 import {
   View,
 } from 'react-native'
@@ -16,7 +15,7 @@ export default class App extends Component {
   render() { return (
     <Provider store={store}>
       <View style={{flex: 1}}>
-        <Cam />
+        <Stage />
         <OfflineProvider />
       </View>
     </Provider>

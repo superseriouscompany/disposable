@@ -15,6 +15,7 @@ class Login extends Component {
   constructor(props) {
     super(props)
     this.login = this.login.bind(this)
+    this.state = {}
   }
 
   login() {
@@ -27,10 +28,14 @@ class Login extends Component {
         <TextInput
           placeholder={'Name'}
           style={[style.input]}
+          value={this.state.name}
+          onChangeText={(name) => this.setState({name})}
           />
         <TextInput
           placeholder={'Email'}
           style={[style.input]}
+          value={this.state.email}
+          onChangeText={(email) => this.setState({email})}
           />
       </View>
       <TouchableOpacity style={style.button} onPress={this.login}>

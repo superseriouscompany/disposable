@@ -3,16 +3,26 @@
 import React, {Component} from 'react'
 import {connect}          from 'react-redux';
 import Cam                from './Cam';
+import Login              from './Login';
+import {View}             from 'react-native'
 
 class Stage extends Component {
-  render() { return (
-    <Cam />
-  )}
+  render() {
+    return (
+      <View style={{flex: 1}}>
+        { this.props.scene === 'Cam' ?
+          <Cam />
+        :
+          <Login />
+        }
+      </View>
+    )
+  }
 }
 
 function mapStateToProps(state) {
   return {
-    scene: state.scene,
+    scene: state.scene.name,
   }
 }
 

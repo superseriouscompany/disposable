@@ -1,7 +1,8 @@
 'use strict'
 
 import React, {Component} from 'react'
-import {connect}          from 'react-redux';
+import {connect}          from 'react-redux'
+import {createUser}       from '../actions/user'
 import {
   StyleSheet,
   Text,
@@ -87,10 +88,14 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    login: () => {
-      return dispatch({type: 'scene:change', scene: 'Cam'})
+    login: (user) => {
+      return dispatch(createUser(user)).then((ok) => {
+        dispatch({type: 'scene:change', scene: 'Cam'})
+      }).catch((err) => {
+        console.error(err)
+      })
     }
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Login)

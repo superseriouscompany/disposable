@@ -5,6 +5,10 @@ export const baseUrl = __DEV__ ?
 export default {
   request: function(path, options) {
     if( path[0] != '/' ) path = `/${path}`;
+    if( options.body && typeof options.body !== 'string' ) {
+      options.body = JSON.stringify(options.body)
+    }
+
     return fetch(
       `${baseUrl}${path}`,
       {

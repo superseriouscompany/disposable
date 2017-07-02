@@ -20,7 +20,12 @@ class Login extends Component {
   }
 
   login() {
-    this.props.login()
+    if( !this.state.email || !this.state.name ) { return }
+
+    this.props.login({
+      email: this.state.email,
+      name:  this.state.name,
+    })
   }
 
   render() { return (

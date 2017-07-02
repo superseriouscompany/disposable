@@ -10,7 +10,7 @@ class Stage extends Component {
   render() {
     return (
       <View style={{flex: 1}}>
-        { this.props.scene === 'Cam' ?
+        { this.props.scene === 'Cam' || true ?
           <Cam />
         :
           <Login />

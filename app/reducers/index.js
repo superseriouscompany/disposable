@@ -12,6 +12,7 @@ import {
 import outbox from './outbox'
 import camera from './camera'
 import scene  from './scene'
+import album  from './album'
 
 const middleware = [thunk]
 if( __DEV__ ) {
@@ -22,6 +23,7 @@ const reducers = combineReducers({
   outbox,
   camera,
   scene,
+  album,
 })
 
 const store = createStore(

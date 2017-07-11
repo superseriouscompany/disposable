@@ -11,7 +11,7 @@ import {
   View,
 } from 'react-native'
 
-
+// TODO: deal with user logging in to existing account
 class Login extends Component {
   constructor(props) {
     super(props)
@@ -36,12 +36,17 @@ class Login extends Component {
           style={[style.input]}
           value={this.state.name}
           onChangeText={(name) => this.setState({name})}
+          autoCorrect={false}
+          autoCapitalize="words"
           />
         <TextInput
           placeholder={'Email'}
           style={[style.input]}
           value={this.state.email}
+          autoCapitalize="none"
+          autoCorrect={false}
           onChangeText={(email) => this.setState({email})}
+          keyboardType="email-address"
           />
       </View>
       <TouchableOpacity style={style.button} onPress={this.login}>
@@ -94,9 +99,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     login: (user) => {
-      return dispatch(createUser(user)).then((ok) => {
-        dispatch({type: 'scene:change', scene: 'Cam'})
-      }).catch((err) => {
+      return dispatch(createUser(user)).catch((err) => {
+        alert(err && err.message)
         console.error(err)
       })
     }

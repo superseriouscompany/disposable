@@ -10,10 +10,10 @@ class Stage extends Component {
   render() {
     return (
       <View style={{flex: 1}}>
-        { this.props.scene === 'Cam' || true ?
-          <Cam />
-        :
+        { !this.props.session ?
           <Login />
+        :
+          <Cam />
         }
       </View>
     )
@@ -22,7 +22,8 @@ class Stage extends Component {
 
 function mapStateToProps(state) {
   return {
-    scene: state.scene.name,
+    scene:   state.scene.name,
+    session: state.session,
   }
 }
 

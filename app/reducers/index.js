@@ -9,10 +9,11 @@ import {
   combineReducers,
 } from 'redux'
 
-import outbox from './outbox'
-import camera from './camera'
-import scene  from './scene'
-import album  from './album'
+import outbox  from './outbox'
+import camera  from './camera'
+import scene   from './scene'
+import album   from './album'
+import session from './session'
 
 const middleware = [thunk]
 if( __DEV__ ) {
@@ -24,6 +25,7 @@ const reducers = combineReducers({
   camera,
   scene,
   album,
+  session,
 })
 
 const store = createStore(
@@ -38,6 +40,7 @@ const store = createStore(
 const persistence = persistStore(store, {storage: AsyncStorage, whitelist: [
   'outbox',
   'camera',
+  'session',
 ]})
 
 export default store

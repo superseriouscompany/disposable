@@ -9,8 +9,6 @@ import {
   View,
 } from 'react-native'
 
-const baseUrl = 'https://disposable.superserious.co'
-
 export default class App extends Component {
   render() { return (
     <Provider store={store}>

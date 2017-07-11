@@ -1,6 +1,5 @@
 export const baseUrl = __DEV__ ?
-  'https://disposable.superserious.co' :
-  // 'https://superserious.ngrok.io' :
+  'https://superserious.ngrok.io' :
   'https://disposable.superserious.co';
 
 export default function request(path, options = {}) {

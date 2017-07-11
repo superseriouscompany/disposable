@@ -5,7 +5,7 @@ import api from './api'
 export function createUser(user) {
   return function(dispatch) {
     dispatch({type: 'login:loading'})
-    return api.request('/users', {
+    return api('/users', {
       method: 'POST',
       body: user
     }).then((body) => {

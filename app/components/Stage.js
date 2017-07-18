@@ -1,9 +1,11 @@
 'use strict'
 
 import React, {Component} from 'react'
-import {connect}          from 'react-redux';
-import Cam                from './Cam';
-import Login              from './Login';
+import {connect}          from 'react-redux'
+import Login              from './Login'
+import Winder             from './Winder'
+import Viewfinder         from './Viewfinder'
+import Album              from './Album'
 import {View}             from 'react-native'
 
 class Stage extends Component {
@@ -12,8 +14,12 @@ class Stage extends Component {
       <View style={{flex: 1}}>
         { !this.props.session ?
           <Login />
+        : !this.props.photosRemaining ?
+          <Album />
+        : !this.props.wound ?
+          <Winder />
         :
-          <Cam />
+          <Viewfinder />
         }
       </View>
     )
@@ -22,8 +28,10 @@ class Stage extends Component {
 
 function mapStateToProps(state) {
   return {
-    scene:   state.scene.name,
-    session: state.session,
+    scene:           state.scene.name,
+    session:         state.session,
+    wound:           state.camera.wound,
+    photosRemaining: state.camera.remaining,
   }
 }
 
@@ -33,4 +41,4 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Stage);
+export default connect(mapStateToProps, mapDispatchToProps)(Stage)

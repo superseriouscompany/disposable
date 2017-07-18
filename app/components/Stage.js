@@ -12,7 +12,9 @@ class Stage extends Component {
   render() {
     return (
       <View style={{flex: 1}}>
-        { !this.props.session ?
+        { !this.props.hydrated ?
+          null
+        : !this.props.session ?
           <Login />
         : !this.props.photosRemaining ?
           <Album />
@@ -28,6 +30,7 @@ class Stage extends Component {
 
 function mapStateToProps(state) {
   return {
+    hydrated:        state.hydration,
     scene:           state.scene.name,
     session:         state.session,
     wound:           state.camera.wound,

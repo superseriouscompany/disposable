@@ -9,11 +9,12 @@ import {
   combineReducers,
 } from 'redux'
 
-import outbox  from './outbox'
-import camera  from './camera'
-import scene   from './scene'
-import album   from './album'
-import session from './session'
+import outbox   from './outbox'
+import camera   from './camera'
+import scene    from './scene'
+import album    from './album'
+import session  from './session'
+import hydrated from './hydrated'
 
 const middleware = [thunk]
 if( __DEV__ ) {
@@ -26,6 +27,7 @@ const reducers = combineReducers({
   scene,
   album,
   session,
+  hydrated,
 })
 
 const store = createStore(

@@ -50,14 +50,10 @@ export default class SwipeHint extends Component {
         flexDirection: 'row',
         alignItems: 'center',
       }]}>
-        { props.hidden ?
-          null
-        :
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Text style={{fontSize: 50}}>👆</Text>
-            <Text style={{fontSize: 20, color: 'silver'}}>swipe</Text>
-          </View>
-        }
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <Text style={{fontSize: 50}}>👆</Text>
+          <Text style={{fontSize: 20, color: 'silver'}}>swipe</Text>
+        </View>
       </Animated.View>
     )
   }

@@ -57,8 +57,6 @@ function mapStateToProps(state) {
     return !!i.failureCount
   }).length
 
-  failedPhotos = 5
-
   return {
     text: failedPhotos ? `Waiting for internet to upload ${failedPhotos} photos.` : null,
   }
@@ -79,6 +77,7 @@ const style = StyleSheet.create({
     backgroundColor: '#999',
     justifyContent: 'center',
     alignItems: 'center',
+    zIndex: 1,
   },
 
   text: {

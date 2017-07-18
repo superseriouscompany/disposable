@@ -85,40 +85,35 @@ class Winder extends Component {
 
     return (
       <View style={{flex: 1}}>
-        { !this.props.photosRemaining ?
-          <View style={style.spentCnr}>
-            <Text style={style.spent}>
-              ⏳
-            </Text>
-            <Text style={{textAlign: 'center'}}>You've used up all your film!{"\n\n"}Check back in 3 days for your photos.</Text>
+        <View style={style.container} {...this._panResponder.panHandlers}>
+          <Banner />
+          <View style={style.wheel}>
+            <Image source={require('../images/Wheel.png')} style={[style.gear, {
+              transform: [
+                { rotate: `${(this.state.wind / 10) % 360}deg` }
+              ]
+            }]} />
           </View>
-        :
-          <View style={style.container} {...this._panResponder.panHandlers}>
-            <Banner />
-            <View style={style.wheel}>
-              <Image source={require('../images/Wheel.png')} style={[style.gear, {
-                transform: [
-                  { rotate: `${(this.state.wind / 10) % 360}deg` }
-                ]
-              }]} />
-              <SwipeHint style={style.hint} hidden={this.state.activated}/>
-            </View>
 
-            <View style={style.statusCnr}>
-              <View style={style.progressCnr}>
-                <View style={[style.progress, {
-                  width: `${Math.min(1, props.photosRemaining / props.totalPhotos) * 100}%`,
-                }]}>
-                  <View style={[style.progress, style.complete, {
-                    width: `${Math.min(1, this.state.wind / THRESH) * 100}%`,
-                  }]} />
+          <View style={style.bottomCnr}>
+            { this.state.activated ?
+              <View style={style.statusCnr}>
+                <View style={style.progressCnr}>
+                  <View style={[style.progress, {
+                    width: `${Math.min(1, props.photosRemaining / props.totalPhotos) * 100}%`,
+                  }]}>
+                    <View style={[style.progress, style.complete, {
+                      width: `${Math.min(1, this.state.wind / THRESH) * 100}%`,
+                    }]} />
+                  </View>
                 </View>
+                <Text style={style.count}>{this.props.photosRemaining} left</Text>
               </View>
-
-              <Text style={style.count}>{this.props.photosRemaining} left</Text>
-            </View>
+            :
+              <SwipeHint style={style.hint} />
+            }
           </View>
-        }
+        </View>
         <DevPanel />
       </View>
     )
@@ -159,19 +154,16 @@ const style = StyleSheet.create({
     aspectRatio: 1,
   },
 
-  hint: {
-    zIndex: 1,
-    backgroundColor: 'transparent',
+  bottomCnr: {
+    height: 60,
+    marginTop: 10,
   },
 
   statusCnr: {
     width: '40%',
-    height: '5%',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    marginTop: 20,
-    marginBottom: 20,
+    flex: 1,
     flexDirection: 'row',
+    alignItems: 'center',
   },
 
   progressCnr: {
@@ -179,6 +171,7 @@ const style = StyleSheet.create({
     borderColor: '#ddd',
     borderRadius: 5,
     flex: 1,
+    height: 20,
     marginRight: 5,
     overflow: 'hidden',
   },

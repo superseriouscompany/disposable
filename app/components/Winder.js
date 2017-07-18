@@ -96,12 +96,12 @@ class Winder extends Component {
           <View style={style.container} {...this._panResponder.panHandlers}>
             <Banner />
             <View style={style.wheel}>
-              <SwipeHint style={style.hint} hidden={this.state.activated}/>
               <Image source={require('../images/Wheel.png')} style={[style.gear, {
                 transform: [
                   { rotate: `${(this.state.wind / 10) % 360}deg` }
                 ]
               }]} />
+              <SwipeHint style={style.hint} hidden={this.state.activated}/>
             </View>
 
             <View style={style.statusCnr}>
@@ -160,7 +160,6 @@ const style = StyleSheet.create({
   },
 
   hint: {
-    position: 'absolute',
     zIndex: 1,
     backgroundColor: 'transparent',
   },

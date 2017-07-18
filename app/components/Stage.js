@@ -30,7 +30,7 @@ class Stage extends Component {
 
 function mapStateToProps(state) {
   return {
-    hydrated:        state.hydration,
+    hydrated:        state.hydrated,
     scene:           state.scene.name,
     session:         state.session,
     wound:           state.camera.wound,

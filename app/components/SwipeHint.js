@@ -5,6 +5,7 @@ import {
   Animated,
   StyleSheet,
   Text,
+  View,
 } from 'react-native'
 
 export default class SwipeHint extends Component {
@@ -35,21 +36,29 @@ export default class SwipeHint extends Component {
     const {props} = this
 
     return (
-      <Animated.Text style={[props.style, {
+      <Animated.View style={[props.style, {
         transform: [{
           translateX: this.state.anim.interpolate({
             inputRange:  [0, 1],
-            outputRange: [30, -100],
+            outputRange: [100, -100],
           }),
         }],
         opacity: this.state.anim.interpolate({
-          inputRange:  [0, 0.8, 1],
-          outputRange: [1, 1, 0],
+          inputRange:  [0, 1],
+          outputRange: [1, 0],
         }),
-        color: '#ffc50c',
+        flexDirection: 'row',
+        alignItems: 'center',
       }]}>
-        { props.hidden ? null : 'swipe left to wind' }
-      </Animated.Text>
+        { props.hidden ?
+          null
+        :
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Text style={{fontSize: 50}}>👆</Text>
+            <Text style={{fontSize: 20, color: 'silver'}}>swipe</Text>
+          </View>
+        }
+      </Animated.View>
     )
   }
 }

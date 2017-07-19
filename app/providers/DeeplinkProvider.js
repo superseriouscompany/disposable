@@ -5,16 +5,27 @@ import {connect}          from 'react-redux'
 import {Linking}          from 'react-native'
 
 class DeeplinkProvider extends Component {
+  constructor(props) {
+    super(props)
+    this.handleUrl = this.handleUrl.bind(this)
+  }
+
   componentDidMount() {
-    Linking.addEventListener('url', this.handleOpenURL)
+    Linking.addEventListener('url', this.handleUrl)
   }
 
   componentWillUnmount() {
-    Linking.removeEventListener('url', this.handleOpenURL)
+    Linking.removeEventListener('url', this.handleUrl)
   }
 
-  handleOpenURL(e) {
-    alert(e.url)
+  handleUrl(e) {
+    var matches = e.url.match(/\/s\/(.*?)$/)
+    if( !matches.length ) {
+      return console.warn('Unknown url', e.url)
+    }
+
+    const accessToken = matches[1]
+    this.props.login(accessToken)
   }
 
   render() { return null }
@@ -28,7 +39,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-
+    login: (accessToken) => {
+      dispatch({type: 'login:yes', user: {accessToken}})
+    }
   }
 }
 

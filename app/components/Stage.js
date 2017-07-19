@@ -6,9 +6,24 @@ import Login              from './Login'
 import Winder             from './Winder'
 import Viewfinder         from './Viewfinder'
 import Album              from './Album'
-import {View}             from 'react-native'
+import {
+  Linking,
+  View
+} from 'react-native'
 
 class Stage extends Component {
+  componentDidMount() {
+    Linking.addEventListener('url', this.handleOpenURL)
+  }
+
+  componentWillUnmount() {
+    Linking.removeEventListener('url', this.handleOpenURL)
+  }
+
+  handleOpenURL(e) {
+    alert(e.url)
+  }
+
   render() {
     return (
       <View style={{flex: 1}}>

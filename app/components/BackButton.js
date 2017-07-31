@@ -10,7 +10,6 @@ import {
 } from 'react-native'
 
 class BackButton extends Component {
-
   render() {
     const {props} = this
     return (

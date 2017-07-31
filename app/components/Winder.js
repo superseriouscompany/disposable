@@ -2,17 +2,9 @@
 
 import React, {Component} from 'react'
 import {connect}          from 'react-redux'
-import Banner             from './Banner'
-import SwipeHint          from './SwipeHint';
-import DevPanel           from './DevPanel';
-
+import WinderView         from '../views/WinderView'
 import {
-  Image,
   PanResponder,
-  StyleSheet,
-  TouchableOpacity,
-  Text,
-  View,
 } from 'react-native'
 
 const THRESH = 1000
@@ -84,38 +76,7 @@ class Winder extends Component {
     const {props} = this
 
     return (
-      <View style={{flex: 1}}>
-        <View style={style.container} {...this._panResponder.panHandlers}>
-          <Banner />
-          <View style={style.wheel}>
-            <Image source={require('../images/Wheel.png')} style={[style.gear, {
-              transform: [
-                { rotate: `${(this.state.wind / 10) % 360}deg` }
-              ]
-            }]} />
-          </View>
-
-          <View style={style.bottomCnr}>
-            { this.state.activated ?
-              <View style={style.statusCnr}>
-                <View style={style.progressCnr}>
-                  <View style={[style.progress, {
-                    width: `${Math.min(1, props.photosRemaining / props.totalPhotos) * 100}%`,
-                  }]}>
-                    <View style={[style.progress, style.complete, {
-                      width: `${Math.min(1, this.state.wind / THRESH) * 100}%`,
-                    }]} />
-                  </View>
-                </View>
-                <Text style={style.count}>{this.props.photosRemaining} left</Text>
-              </View>
-            :
-              <SwipeHint style={style.hint} />
-            }
-          </View>
-        </View>
-        <DevPanel />
-      </View>
+      <WinderView {...this.props} {...this.state} thresh={THRESH} panResponder={this._panResponder}/>
     )
   }
 }
@@ -135,63 +96,5 @@ function mapDispatchToProps(dispatch) {
     }
   }
 }
-
-const style = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  wheel: {
-    backgroundColor: 'transparent',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  gear: {
-    width: 40,
-    aspectRatio: 1,
-  },
-
-  bottomCnr: {
-    height: 60,
-    marginTop: 10,
-  },
-
-  statusCnr: {
-    width: '40%',
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-
-  progressCnr: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 5,
-    flex: 1,
-    height: 20,
-    marginRight: 5,
-    overflow: 'hidden',
-  },
-
-  progress: {
-    backgroundColor: 'black',
-    height: '100%',
-  },
-
-  complete: {
-    backgroundColor: '#ffc50c',
-    position: 'absolute',
-    left: 0,
-    top: 0,
-  },
-
-  spent: {
-    fontSize: 120,
-    textAlign: 'center',
-  },
-})
 
 export default connect(mapStateToProps, mapDispatchToProps)(Winder);

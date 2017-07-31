@@ -11,7 +11,6 @@ import {
   View,
 } from 'react-native'
 
-// TODO: deal with user logging in to existing account
 class Login extends Component {
   constructor(props) {
     super(props)
@@ -20,38 +19,66 @@ class Login extends Component {
   }
 
   login() {
-    if( !this.state.email || !this.state.name ) { return }
+    if( !this.state.email || (this.state.newUser && !this.state.name) ) { return }
 
     this.props.login({
       email: this.state.email,
       name:  this.state.name,
+    }).then(() => {
+      this.setState({
+        newUser: true
+      })
+    }).catch((err) => {
+      if( err.message == 409 ) {
+        return this.setState({
+          existingUser: true
+        })
+      }
+      alert(err && err.message)
+      console.error(err)
     })
   }
 
   render() { return (
     <View style={style.container}>
       <View style={style.fields}>
-        <TextInput
-          placeholder={'Name'}
-          style={[style.input]}
-          value={this.state.name}
-          onChangeText={(name) => this.setState({name})}
-          autoCorrect={false}
-          autoCapitalize="words"
-          />
-        <TextInput
-          placeholder={'Email'}
-          style={[style.input]}
-          value={this.state.email}
-          autoCapitalize="none"
-          autoCorrect={false}
-          onChangeText={(email) => this.setState({email})}
-          keyboardType="email-address"
-          />
+        { this.state.newUser ?
+          <TextInput
+            placeholder={'Name'}
+            style={[style.input]}
+            value={this.state.name}
+            onChangeText={(name) => this.setState({name})}
+            autoCorrect={false}
+            autoFocus={true}
+            autoCapitalize="words"
+            />
+        : this.state.existingUser ?
+          <TouchableOpacity onPress={() => this.setState({existingUser: null})}>
+            <Text>
+              Looks like you already have an account.
+              {"\n\n"}
+              Check your email for a link to sign in!
+              {"\n\n"}
+              Or tap anywhere to go back.
+            </Text>
+          </TouchableOpacity>
+        :
+          <TextInput
+            placeholder={'Email'}
+            style={[style.input]}
+            value={this.state.email}
+            autoCapitalize="none"
+            autoCorrect={false}
+            onChangeText={(email) => this.setState({email})}
+            keyboardType="email-address"
+            />
+        }
       </View>
-      <TouchableOpacity style={style.button} onPress={this.login}>
-        <Text style={style.buttonText}>Enter</Text>
-      </TouchableOpacity>
+      { !this.state.existingUser ?
+        <TouchableOpacity style={style.button} onPress={this.login}>
+          <Text style={style.buttonText}>Enter</Text>
+        </TouchableOpacity>
+      : null }
     </View>
   )}
 }
@@ -81,8 +108,9 @@ const style = StyleSheet.create({
   },
 
   input: {
-    height: 25,
-    padding: 5,
+    height: 50,
+    paddingLeft: 20,
+    paddingRight: 20,
     borderColor: '#c9c9c9',
     borderWidth: 1,
     borderRadius: 5,
@@ -99,10 +127,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     login: (user) => {
-      return dispatch(createUser(user)).catch((err) => {
-        alert(err && err.message)
-        console.error(err)
-      })
+      return dispatch(createUser(user))
     }
   }
 }

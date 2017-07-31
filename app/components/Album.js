@@ -5,9 +5,14 @@ import {connect}          from 'react-redux'
 import {loadAlbum}        from '../actions/album'
 import {
   ActivityIndicator,
+  Dimensions,
+  Image,
   Text,
+  ScrollView,
   View,
 } from 'react-native'
+
+const {width, height} = Dimensions.get('window')
 
 class Album extends Component {
   componentDidMount() {
@@ -24,13 +29,11 @@ class Album extends Component {
         : props.err ?
           <Text>{props.err}</Text>
         : props.photos && props.photos.length ?
-          <View style={{flex: 1}}>
+          <ScrollView style={{flex: 1, backgroundColor: 'hotpink'}}>
             { props.photos.map((p, key) => (
-              <View key={key}>
-                <Text>{p.id}</Text>
-              </View>
+              <Image key={key} source={{uri: p.url}} style={{height: height, width: width}}/>
             ))}
-          </View>
+          </ScrollView>
         : props.photos ?
           <Text>No photos available.</Text>
         :

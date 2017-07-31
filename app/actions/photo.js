@@ -2,12 +2,13 @@
 
 import {baseUrl} from './api'
 
-export function uploadPhoto(photo) {
+export function uploadPhoto(groupId, photo) {
   return function(dispatch) {
     return new Promise((resolve, reject) => {
       var body = new FormData();
 
       body.append('photo', {uri: `file://${photo.uri}`, name: 'photo.jpg', type: 'image/jpeg'});
+      body.append('groupId', groupId)
 
       var xhr = new XMLHttpRequest;
       xhr.onreadystatechange = (e) => {

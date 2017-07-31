@@ -2,6 +2,7 @@
 
 import React, {Component} from 'react'
 import {connect}          from 'react-redux'
+import DevPanel           from './DevPanel'
 import {
   TouchableOpacity,
   Text,
@@ -13,14 +14,20 @@ class Albums extends Component {
     const {props} = this
 
     return (
-      <View>
+      <View style={{flex: 1}}>
         <TouchableOpacity onPress={props.newAlbum}>
           <Text>+ New Album</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => props.viewAlbum('yep')}>
+          <Text>Yep</Text>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => props.viewAlbum('everyone')}>
           <Text>Everyone</Text>
         </TouchableOpacity>
+
+        <DevPanel />
       </View>
     )
   }

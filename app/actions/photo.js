@@ -8,7 +8,6 @@ export function uploadPhoto(groupId, photo) {
       var body = new FormData();
 
       body.append('photo', {uri: `file://${photo.uri}`, name: 'photo.jpg', type: 'image/jpeg'});
-      body.append('groupId', groupId)
 
       var xhr = new XMLHttpRequest;
       xhr.onreadystatechange = (e) => {
@@ -29,7 +28,7 @@ export function uploadPhoto(groupId, photo) {
           reject(xhr.status + ': ' + xhr.responseText);
         }
       }
-      xhr.open('POST', `${baseUrl}/photos`);
+      xhr.open('POST', `${baseUrl}/albums/${groupId}/photos`);
       xhr.send(body);
     }).catch((err) => {
       throw err

@@ -8,7 +8,9 @@ import {
   Dimensions,
   Image,
   Text,
+  TouchableOpacity,
   ScrollView,
+  StyleSheet,
   View,
 } from 'react-native'
 
@@ -24,6 +26,11 @@ class Album extends Component {
 
     return (
       <View style={{flex: 1}}>
+        <TouchableOpacity onPress={() => alert('hi')} style={style.back}>
+          <Text style={style.backText}>
+            &larr;
+          </Text>
+        </TouchableOpacity>
         { props.loading ?
           <ActivityIndicator />
         : props.err ?
@@ -59,5 +66,19 @@ function mapDispatchToProps(dispatch) {
     }
   }
 }
+
+const style = StyleSheet.create({
+  back: {
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    padding: 5,
+    position: 'absolute',
+    top: 10,
+    left: 10,
+    zIndex: 1,
+  },
+  backText: {
+    color: 'white',
+  }
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(Album)

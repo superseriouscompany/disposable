@@ -21,7 +21,7 @@ class Stage extends Component {
           <Login />
         : this.props.scene === 'Albums' ?
           <Albums />
-        : !this.props.photosRemaining ?
+        : this.props.scene === 'Album' || !this.props.photosRemaining ?
           <Album />
         : !this.props.wound ?
           <Winder />

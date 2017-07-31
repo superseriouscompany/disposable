@@ -19,7 +19,7 @@ const {width, height} = Dimensions.get('window')
 
 class Album extends Component {
   componentDidMount() {
-    this.props.loadAlbum()
+    this.props.loadAlbum(this.props.albumName)
   }
 
   render() {
@@ -50,16 +50,17 @@ class Album extends Component {
 
 function mapStateToProps(state) {
   return {
-    loading: state.album.loading,
-    photos:  state.album.photos,
-    err:     state.album.err,
+    loading:   state.album.loading,
+    photos:    state.album.photos,
+    err:       state.album.err,
+    albumName: state.album.name || 'everyone',
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    loadAlbum: () => {
-      dispatch(loadAlbum())
+    loadAlbum: (albumName) => {
+      dispatch(loadAlbum(albumName))
     },
 
     back: () => {

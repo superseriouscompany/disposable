@@ -6,7 +6,8 @@ export default function(state=initialState, action) {
   switch(action.type) {
     case 'album:load':
       return {
-        ...state,
+        ...initialState,
+        name:    action.albumName,
         loading: true,
       }
     case 'album:load:yes':

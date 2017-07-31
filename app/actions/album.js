@@ -2,9 +2,10 @@
 
 import request from './api'
 
-export function loadAlbum() {
+export function loadAlbum(albumName) {
   return function(dispatch) {
-    return request('/photos').then((json) => {
+    // TODO: restrict albumName to letters and underscores
+    return request(`/albums/${albumName}/photos`).then((json) => {
       dispatch({type: 'album:load:yes', photos: json.photos})
     }).catch((err) => {
       dispatch({type: 'album:load:no', err: err})

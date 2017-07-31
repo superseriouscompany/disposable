@@ -49,6 +49,7 @@ class Login extends Component {
             value={this.state.name}
             onChangeText={(name) => this.setState({name})}
             autoCorrect={false}
+            autoFocus={true}
             autoCapitalize="words"
             />
         : this.state.existingUser ?
@@ -107,8 +108,9 @@ const style = StyleSheet.create({
   },
 
   input: {
-    height: 25,
-    padding: 5,
+    height: 50,
+    paddingLeft: 20,
+    paddingRight: 20,
     borderColor: '#c9c9c9',
     borderWidth: 1,
     borderRadius: 5,

@@ -1,7 +1,7 @@
 const initialState = {
   wound: false,
-  remaining: 27,
-  total: 27,
+  remaining: __DEV__ ? 1 : 27,
+  total: __DEV__ ? 1 : 27,
 }
 export default function(state=initialState, action) {
   switch(action.type) {

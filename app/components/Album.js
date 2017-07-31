@@ -26,7 +26,7 @@ class Album extends Component {
 
     return (
       <View style={{flex: 1}}>
-        <TouchableOpacity onPress={() => alert('hi')} style={style.back}>
+        <TouchableOpacity onPress={props.back} style={style.back}>
           <Text style={style.backText}>
             &larr;
           </Text>
@@ -63,6 +63,10 @@ function mapDispatchToProps(dispatch) {
   return {
     loadAlbum: () => {
       dispatch(loadAlbum())
+    },
+
+    back: () => {
+      dispatch({type: 'scene:change', scene: 'Albums'})
     }
   }
 }

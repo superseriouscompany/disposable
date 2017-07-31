@@ -6,6 +6,7 @@ import Login              from './Login'
 import Winder             from './Winder'
 import Viewfinder         from './Viewfinder'
 import Album              from './Album'
+import Albums             from './Albums'
 import {
   View
 } from 'react-native'
@@ -18,6 +19,8 @@ class Stage extends Component {
           null
         : !this.props.session ?
           <Login />
+        : this.props.scene === 'Albums' ?
+          <Albums />
         : !this.props.photosRemaining ?
           <Album />
         : !this.props.wound ?

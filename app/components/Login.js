@@ -24,10 +24,6 @@ class Login extends Component {
     this.props.login({
       email: this.state.email,
       name:  this.state.name,
-    }).then(() => {
-      this.setState({
-        newUser: true
-      })
     }).catch((err) => {
       if( err.message == 409 ) {
         return this.setState({

@@ -3,6 +3,7 @@
 import React, {Component} from 'react'
 import {connect}          from 'react-redux'
 import {loadAlbum}        from '../actions/album'
+import BackButton         from './BackButton'
 import {
   ActivityIndicator,
   Dimensions,
@@ -26,11 +27,7 @@ class Album extends Component {
 
     return (
       <View style={{flex: 1}}>
-        <TouchableOpacity onPress={props.back} style={style.back}>
-          <Text style={style.backText}>
-            &larr;
-          </Text>
-        </TouchableOpacity>
+        <BackButton />
         { props.loading ?
           <ActivityIndicator />
         : props.err ?
@@ -70,19 +67,5 @@ function mapDispatchToProps(dispatch) {
     }
   }
 }
-
-const style = StyleSheet.create({
-  back: {
-    backgroundColor: 'rgba(0,0,0,0.6)',
-    padding: 5,
-    position: 'absolute',
-    top: 10,
-    left: 10,
-    zIndex: 1,
-  },
-  backText: {
-    color: 'white',
-  }
-})
 
 export default connect(mapStateToProps, mapDispatchToProps)(Album)

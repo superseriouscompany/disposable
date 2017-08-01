@@ -44,6 +44,10 @@ function mapDispatchToProps(dispatch) {
     viewAlbum: (albumName) => {
       dispatch({type: 'album:load', name: albumName})
       dispatch({type: 'scene:change', scene: 'Album'})
+    },
+
+    newAlbum: () => {
+      dispatch({type: 'scene:change', scene: 'NewAlbum'})
     }
   }
 }

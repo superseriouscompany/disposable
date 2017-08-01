@@ -7,6 +7,7 @@ import Winder             from './Winder'
 import Viewfinder         from './Viewfinder'
 import Album              from './Album'
 import Albums             from './Albums'
+import NewAlbum           from './NewAlbum'
 import {
   View
 } from 'react-native'
@@ -19,7 +20,9 @@ class Stage extends Component {
           null
         : !this.props.session ?
           <Login />
-        : this.props.scene === 'Albums' ?
+        : this.props.scene === 'NewAlbum' ?
+          <NewAlbum />
+        : this.props.scene === 'Albums' || !this.props.albumName ?
           <Albums />
         : this.props.scene === 'Album' || !this.props.photosRemaining ?
           <Album />
@@ -40,6 +43,7 @@ function mapStateToProps(state) {
     session:         state.session,
     wound:           state.camera.wound,
     photosRemaining: state.camera.remaining,
+    albumName:       state.album.name,
   }
 }
 

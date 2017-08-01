@@ -2,9 +2,9 @@
 
 import api from './api'
 
-export function add(photoUri) {
+export function add(photoUri, groupId) {
   return function(dispatch) {
-    dispatch({type: 'outbox:add', photo: { uri: photoUri }})
+    dispatch({type: 'outbox:add', photo: { uri: photoUri, groupId: groupId }})
   }
 }
 

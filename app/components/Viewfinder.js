@@ -46,7 +46,7 @@ class Viewfinder extends Component {
 
   takePicture() {
     this.camera.capture({metadata: {}}).then((data) => {
-      return this.props.addPhoto(data.path)
+      return this.props.addPhoto(data.path, this.props.groupId)
     }).catch((err) => {
       console.error(err)
       alert(err.message)
@@ -87,13 +87,15 @@ class Viewfinder extends Component {
 }
 
 function mapStateToProps(state) {
-  return {}
+  return {
+    groupId: state.album.name,
+  }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    addPhoto:(photoUri) => {
-      dispatch(add(photoUri))
+    addPhoto:(photoUri, groupId) => {
+      dispatch(add(photoUri, groupId))
       dispatch({type: 'camera:snap'})
     },
   }

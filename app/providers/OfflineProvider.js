@@ -57,7 +57,7 @@ class OfflineProvider extends Component {
 function mapDispatchToProps(dispatch) {
   return {
     upload: (photo) => {
-      return dispatch(uploadPhoto('everyone', photo))
+      return dispatch(uploadPhoto(photo.groupId || 'everyone', photo))
     },
 
     markFailure: (id) => {
